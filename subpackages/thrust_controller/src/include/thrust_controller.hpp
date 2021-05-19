@@ -18,7 +18,7 @@
 
 #define GRAVITY_CONSTANT 9.81f
 
-#define MAX_THRUST_ (GRAVITY_CONSTANT*mass_*1.5f)
+#define MAX_THRUST_ (GRAVITY_CONSTANT*mass_*2.0f)
 #define MIN_THRUST_ (GRAVITY_CONSTANT*mass_*0.5f)
 #define DEBUG 0
 
@@ -28,8 +28,8 @@ class ThrustController :public RobotProcess {
 private:
     double mass_ = 1.0f;
 
-    const float Kp_ = 3, Kd_ = 0 , Ki = 0.0f;
-	const float antiwindup_limit_ = 2000;
+    const float Kp_ = 9.0f, Kd_ = 0.0 , Ki = 0.01f;
+	const float antiwindup_limit_ = 500;
 
 
 public:

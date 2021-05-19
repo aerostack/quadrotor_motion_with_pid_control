@@ -71,7 +71,7 @@ void ThrustController::computeThrust(double dz_reference){
 
 	float dz_error = (dz_reference- dz_measure_);
 	float dz_derivative_error = (dz_error-last_dz_error)/(dtime+1e-9);
-	dz_derivative_error = dz_derivative_filtering.filterValue(dz_derivative_error);
+	// dz_derivative_error = dz_derivative_filtering.filterValue(dz_derivative_error);
 
 	last_reference = dz_reference;
 	last_dz_error = dz_error;
@@ -85,6 +85,10 @@ void ThrustController::computeThrust(double dz_reference){
 
 	thrust = (thrust < MIN_THRUST_)? MIN_THRUST_ : thrust; // LOW LIMIT THRUST IN [0, MAX_THRUST]
 	thrust = (thrust > MAX_THRUST_)? MAX_THRUST_ : thrust; // HIGH LIMIT THRUST IN [0, MAX_THRUST]
+	
+	std::cout << "dz_reference = " << dz_reference << std::endl;
+	std::cout << "dz_error = " << dz_error << std::endl;
+	std::cout << "thrust = " << thrust << std::endl;
 
 }
 
