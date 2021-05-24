@@ -18,5 +18,6 @@
 	<depend>mav_msgs</depend>
 	<depend>tf</depend>
 	<depend>ros_utils_lib</depend>
+  	<depend>yaml-cpp</depend>
 
 </package>

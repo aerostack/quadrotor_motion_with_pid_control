@@ -10,6 +10,8 @@ void ThrustController::ownSetUp()
 	std::string altitude_rate_yaw_rate_topic;
 	std::string thrust_topic;
 	std::string flight_action_topic;
+	std::string robot_config_path;
+	std::string yaml_config_file;
 
 	ros_utils_lib::getPrivateParam<double>	   ("~uav_mass"						, mass_						    ,1);
 	ros_utils_lib::getPrivateParam<std::string>("~namespace"					, n_space						,"drone1");
@@ -18,7 +20,8 @@ void ThrustController::ownSetUp()
 	ros_utils_lib::getPrivateParam<std::string>("~altitude_rate_yaw_rate_topic"	, altitude_rate_yaw_rate_topic	,"actuator_command/altitude_rate_yaw_rate");
 	ros_utils_lib::getPrivateParam<std::string>("~thrust_topic"					, thrust_topic					,"actuator_command/thrust");
 	ros_utils_lib::getPrivateParam<std::string>("~flight_action_topic"		    , flight_action_topic    		,"actuator_command/flight_action");
-
+	ros_utils_lib::getPrivateParam<std::string>("~robot_config_path"		    , robot_config_path    			,"configs/"+n_space);
+	ros_utils_lib::getPrivateParam<std::string>("~yaml_config_file"		   		, yaml_config_file    			,"quadrotor_pid_controller_config.yaml");
 
 	std::cout << "uav_mass = " << mass_ << std::endl;
 	
@@ -32,24 +35,34 @@ void ThrustController::ownSetUp()
 
     thrust_msg_.thrust = 0;
 	
-	//Code for publishing thrust value in a way that can be compared using rqt_plot tool (Only for debugging purposes)
+	// Load file
+    YAML::Node yamlconf;
+    try
+    {
+        yamlconf = YAML::LoadFile(robot_config_path+"/"+yaml_config_file);
+    }
+    catch (std::exception& e)
+    {
+       std::cout<<"Yaml config file does not exist in path: "<<robot_config_path<<"/"<<yaml_config_file<<" . Taking default values"<<std::endl;
+    }
+	if(yamlconf["thrust_controller"]){
+		Kp_ = yamlconf["thrust_controller"]["kp"].as<float>();
+		Ki  = yamlconf["thrust_controller"]["ki"].as<float>();
+		Kd_ = yamlconf["thrust_controller"]["kd"].as<float>();
+	}
 
+	//Code for publishing thrust value in a way that can be compared using rqt_plot tool (Only for debugging purposes
 	#if DEBUG == 1
-
     thrust_debugger_pub_ = nh.advertise<std_msgs::Float32MultiArray>("/"+n_space+"/"+"debug/thrust_controller",1);
 	thrust_debugger_values_msg_.data = std::vector<float>(2);
-
 	std_msgs::MultiArrayDimension dim;
 	dim.label = "ThrustSignal";
 	dim.size = 2;
 	dim.stride = 1;
 	thrust_debugger_values_msg_.layout.dim.emplace_back(dim);
-
     roll_pitch_yaw_rate_thrust_sub_ = nh.subscribe("/"+n_space+"/"+"actuator_command/roll_pitch_yaw_rate_thrust_test",1,
 												    &ThrustController::rollPitchYawRateThrustCallback,this);
-
 	roll_pitch_yaw_rate_thrust_pub_ = nh.advertise<mav_msgs::RollPitchYawrateThrust>("/"+n_space+"/"+"actuator_command/roll_pitch_yaw_rate_thrust",1);
-
 	#endif
 }
 
@@ -86,9 +99,9 @@ void ThrustController::computeThrust(double dz_reference){
 	thrust = (thrust < MIN_THRUST_)? MIN_THRUST_ : thrust; // LOW LIMIT THRUST IN [0, MAX_THRUST]
 	thrust = (thrust > MAX_THRUST_)? MAX_THRUST_ : thrust; // HIGH LIMIT THRUST IN [0, MAX_THRUST]
 	
-	std::cout << "dz_reference = " << dz_reference << std::endl;
-	std::cout << "dz_error = " << dz_error << std::endl;
-	std::cout << "thrust = " << thrust << std::endl;
+	//std::cout << "dz_reference = " << dz_reference << std::endl;
+	//std::cout << "dz_error = " << dz_error << std::endl;
+	//std::cout << "thrust = " << thrust << std::endl;
 
 }
 

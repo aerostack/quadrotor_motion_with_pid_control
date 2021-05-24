@@ -16,32 +16,33 @@
     <arg name="status_topic"                       default="self_localization/flight_state" />
     <arg name="set_control_mode_service_name"      default="set_control_mode" />
     <arg name="path_blocked_topic"                 default="environnment/path_blocked_by_obstacle" />
-    <arg name="robot_config_path"                  default="$(env AEROSTACK_STACK)/config/$(arg namespace)" />
-    <arg name= "uav_mass"                           default = "1.5"     />
+    <arg name="robot_config_path"                  default="/configs/$(arg namespace)" />
+    <arg name= "uav_mass"                          default = "1.5"     />
 
 
     <include file="$(find quadrotor_pid_controller_process)/launch/quadrotor_pid_controller_process.launch">
-      <arg name="robot_namespace"  value="$(arg namespace)" />
-      <arg name="robot_config_path" 	value="$(arg robot_config_path)" />
+      <arg name="robot_namespace"                     value="$(arg namespace)" />
+      <arg name="robot_config_path" 	                value="$(arg robot_config_path)" />
       <arg name="self_localization_pose_topic_name" 	value="$(arg estimated_pose_topic)" />
       <arg name="self_localization_speed_topic_name" 	value="$(arg estimated_speed_topic)" />
     </include>
 
     <include file="$(find path_tracker_process)/launch/path_tracker_process.launch">
-      <arg name="robot_namespace" value="$(arg namespace)" />
-      <arg name="robot_config_path" value="$(arg robot_config_path)" />
-      <arg name="self_localization_pose_topic_name" 	value="$(arg estimated_pose_topic)" />
-      <arg name="motion_reference_path_topic_name" 	value="$(arg motion_reference_path_topic)" />
-      <arg name="motion_reference_speed_topic_name" 	value="$(arg motion_reference_speed_topic)" />
-      <arg name="motion_reference_pose_topic_name" 	value="$(arg motion_reference_pose_topic)" />
+      <arg name="robot_namespace"                             value="$(arg namespace)" />
+      <arg name="robot_config_path"                           value="$(arg robot_config_path)" />
+      <arg name="self_localization_pose_topic_name" 	        value="$(arg estimated_pose_topic)" />
+      <arg name="motion_reference_path_topic_name" 	          value="$(arg motion_reference_path_topic)" />
+      <arg name="motion_reference_speed_topic_name" 	        value="$(arg motion_reference_speed_topic)" />
+      <arg name="motion_reference_pose_topic_name" 	          value="$(arg motion_reference_pose_topic)" />
       <arg name="motion_reference_remaining_path_topic_name" 	value="$(arg motion_reference_remaining_path_topic)" />
     </include>
 
     <include file="$(find thrust_controller)/launch/thrust_controller.launch">
-      <arg name="namespace" value="$(arg namespace)" />
-      <arg name="estimated_speed_topic" 	  value="$(arg estimated_speed_topic)" />
-      <arg name="estimated_pose_topic" 	    value="$(arg estimated_pose_topic)" />
-      <arg name="uav_mass" 	    value="$(arg uav_mass)" />
+      <arg name="namespace"               value="$(arg namespace)" />
+      <arg name="robot_config_path"       value="$(arg robot_config_path)" />
+      <arg name="estimated_speed_topic" 	value="$(arg estimated_speed_topic)" />
+      <arg name="estimated_pose_topic" 	  value="$(arg estimated_pose_topic)" />
+      <arg name="uav_mass" 	              value="$(arg uav_mass)" />
     </include>
 
    <group ns="$(arg namespace)/$(arg behavior_system)">

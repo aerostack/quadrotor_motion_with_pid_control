@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, ros_utils_lib::getNodeName("ThrustController_v2"));
+    ros::init(argc, argv, ros_utils_lib::getNodeName("thrust_controller"));
     std::cout << ros::this_node::getName()+" Node starting "<< std::endl;
     ThrustController thrust_controller;
     thrust_controller.setUp();

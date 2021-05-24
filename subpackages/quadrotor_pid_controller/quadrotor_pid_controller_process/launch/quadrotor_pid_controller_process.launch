@@ -23,10 +23,10 @@
 	<group ns="$(arg robot_namespace)">
 		<!-- Trajectory Controller - Drone Swarm Architecture -->
 		<node name="quadrotor_pid_controller_process" pkg="quadrotor_pid_controller_process" type="quadrotor_pid_controller_process_main" output="screen">
-			<param name="robot_namespace" value="$(arg robot_namespace)" type="string"/>
-			<param name="robot_config_path" value="$(arg robot_config_path)" type="string"/>			
-			<param name="frequency"   value="$(arg frequency)" type="double" />
-			<param name="init_control_mode"  value="$(arg init_control_mode)" type="string" />
+		<param name="robot_namespace" value="$(arg robot_namespace)" type="string"/>
+		<param name="robot_config_path" value="$(arg robot_config_path)" type="string"/>
+		<param name="frequency"   value="$(arg frequency)" type="double" />
+		<param name="init_control_mode"  value="$(arg init_control_mode)" type="string" />
 
 		<param name="yaml_config_file" value="$(arg yaml_config_file)" type="string"/>
 

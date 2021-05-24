@@ -10,6 +10,7 @@
 #include "tf/transform_datatypes.h"
 #include "tf/tf.h"
 #include <string>
+#include <yaml-cpp/yaml.h>
 #include "ros_utils_lib/ros_utils.hpp"
 #include "ros_utils_lib/control_utils.hpp"
 #include "aerostack_msgs/FlightActionCommand.h"
@@ -27,10 +28,8 @@ class ThrustController :public RobotProcess {
 
 private:
     double mass_ = 1.0f;
-
-    const float Kp_ = 9.0f, Kd_ = 0.0 , Ki = 0.01f;
 	const float antiwindup_limit_ = 500;
-
+    float Kp_ = 9.0f, Kd_ = 0.0 , Ki = 0.01f;
 
 public:
     ThrustController(){};
